@@ -119,7 +119,7 @@ def filter_test():
 def is_palindrome(n):
     m = str(n)
     flag = True
-    if len(m)>=1:
+    if len(m) >= 1:
         for i in range(len(m) // 2):
             if m[i] == m[-i - 1]:
                 pass
@@ -128,38 +128,80 @@ def is_palindrome(n):
     return flag
 
 
-#这里有个技巧那就是str[::-1]就是把一个list颠倒过来。
+# 这里有个技巧那就是str[::-1]就是把一个list颠倒过来。
 def is_palindrome1(m):
-    return m==int(str(m)[::-1])
+    return m == int(str(m)[::-1])
 
 
-#sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序,
-#sorted()也是一个高阶函数。用sorted()排序的关键在于实现一个映射函数。
+# sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序,
+# sorted()也是一个高阶函数。用sorted()排序的关键在于实现一个映射函数。
 def by_name(t):
     return t[0]
+
 
 def by_score(t):
     return t[1]
 
-#从这几个方面来看，sorted的key值，其实就是建立key-value的规则。比如说按照名字排序，其实就是把元组的第一个拿出来，建立key-value
-#然后根据sorted根据key来排序。根据分数来排序，其实就是把元组的第二个拿出来，建立key-value。以此类推。
+
+# 从这几个方面来看，sorted的key值，其实就是建立key-value的规则。比如说按照名字排序，其实就是把元组的第一个拿出来，建立key-value
+# 然后根据sorted根据key来排序。根据分数来排序，其实就是把元组的第二个拿出来，建立key-value。以此类推。
 def sorted_practice():
     print('--------------------------------------sorted practice-------------------------')
     print('---------------------------------------按名字排序------------------------------')
     L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
-    L2=sorted(L,key=by_name)
+    L2 = sorted(L, key=by_name)
     print(L2)
     print('---------------------------------------按成绩排名-------------------------------')
-    L3=sorted(L,key=by_score,reverse=True)
+    L3 = sorted(L, key=by_score, reverse=True)
     print(L3)
-
 
 
 def filter_practice():
     print('---------------------------------回数test-------------------------------')
-    print(list(filter(is_palindrome,range(1,1000))))
-    print(list(filter(is_palindrome1,range(1,1000))))
+    print(list(filter(is_palindrome, range(1, 1000))))
+    print(list(filter(is_palindrome1, range(1, 1000))))
 
+    # 返回函数，高阶函数不仅可以接受一个函数，还可以把一个函数返回，这个函数就叫做返回函数。
+    # 返回函数是在一个函数的内部定义的，并且被返回.这种相关参数和变量都被保存在返回函数中，
+    # 这种结构体被叫做“闭包”
+    # 闭包问题：
+    # 注意到返回的函数在其定义内部引用了局部变量args，所以，当一个函数返回了一个函数后，其内部的局部变量还被新函数引用
+    # 返回的函数并没有立刻执行，而是直到调用了f()才执行,fn表示函数名，而fn()表示函数调用。
+    # 所以总结返回函数：1.一个函数可以返回一个计算结果，也可以返回一个函数。 2.返回一个函数时，要牢记该函数并没有被执行，只有调用时才会被执行
+    # 返回函数中不要引用任何有变化的变量。
+
+
+def lasy_sum(*args):
+    def sum():
+        ax = 0
+        for i in args:
+            ax = ax + i
+        return ax
+
+    return sum
+
+
+def count():
+    fs = []
+    for i in range(1, 4):
+        def fn():
+            return i * i
+
+        fs.append(fn)
+    return fs
+
+
+def lasy_test():
+    print('------------------------------------返回函数-----------------')
+    f1 = lasy_sum(1, 2, 3, 4)
+    f2 = lasy_sum(2, 3, 4, 5)
+    print(f1())
+    print(f2())
+    print('-----------------------------------返回函数测试2-----------------')
+    f3, f4, f5 = count()
+    print(f3())
+    print(f4())
+    print()
 
 
 # 对于函数名相同的函数或者变量来说，先以最新的为主，当最新的被del掉，才会以内置的为主。
@@ -171,3 +213,4 @@ if __name__ == '__main__':
     f_od()
     filter_practice()
     sorted_practice()
+    lasy_test()

@@ -205,6 +205,29 @@ def lasy_test():
     print(f4())
     print()
 
+def log(func):
+    def wrapper(*args,**kwargs):
+        print('call %s'%func.__name__)
+        return func(*args,**kwargs)
+    return wrapper
+
+
+def log1(text):
+    def decorator(func):
+        def wrapper(*args,**kwargs):
+            print('%s %s()'%(text,func.__name__))
+            return func(*args,**kwargs)
+        return wrapper
+    return decorator
+
+@log1('excute')
+def now():
+    print('-------------------------------decorator------------------------')
+
+
+
+
+
 
 # 对于函数名相同的函数或者变量来说，先以最新的为主，当最新的被del掉，才会以内置的为主。
 if __name__ == '__main__':
@@ -216,3 +239,5 @@ if __name__ == '__main__':
     filter_practice()
     sorted_practice()
     lasy_test()
+    now()
+    print(now.__name__)

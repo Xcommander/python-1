@@ -212,8 +212,10 @@ def log(func):
     return wrapper
 
 
+import functools
 def log1(text):
     def decorator(func):
+        @functools.wraps(func)
         def wrapper(*args,**kwargs):
             print('%s %s()'%(text,func.__name__))
             return func(*args,**kwargs)
@@ -223,6 +225,57 @@ def log1(text):
 @log1('excute')
 def now():
     print('-------------------------------decorator------------------------')
+
+
+def d(func):
+    @functools.wraps(func)
+    def wrrap(*args,**kwargs):
+        print('begin %s'%(func.__name__))
+        return func(*args,**kwargs)
+    return wrrap
+
+@d
+def call():
+    print('end %s'%(call.__name__))
+
+#decorator传入的必须的是一个function，返回函数只需要定义为一般函数，因为decorator是把一个函数进行包装的，所以参数必须是个函数。
+#为了增强函数而不改变函数原来属性，则必须在返回函数之前增加@functools.wraps(func),来保持属性不变
+def xlc(x):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapp(*args,**kwargs):
+            print('this str is %s'%x)
+            return func(*args,**kwargs)
+        return wrapp
+    #return decorator
+    if isinstance(x,str):
+        return decorator
+    else:
+        f=x
+        x=''
+        return decorator(f)
+
+
+
+@xlc
+def x():
+    print('--------------没有参数测试---------------------')
+
+@xlc('闫苏婉')
+def x2():
+    print('---------------有参数测试---------------------')
+
+
+
+#偏函数：functools.partial这个函数，其实他可以接受function，args，kwargs,注意partail第一个接受的必须是一个function，剩下两个随意
+#python解释器会根据传入参数的类型来自动加到补全到函数体内的，比如传入2,3,4,5就是个普通函数。比如传入k=2这个就是关键字参数，根据函数的
+#特性，需要自动补全到对应位置。补充的位置一般在靠近左边
+def partial():
+    return functools.partial(int,base=2)
+
+
+
+
 
 
 
@@ -241,3 +294,9 @@ if __name__ == '__main__':
     lasy_test()
     now()
     print(now.__name__)
+    call()
+    print(call.__name__)
+    x()
+    x2()
+    f=partial()
+    print(f('10'))

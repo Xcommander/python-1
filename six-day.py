@@ -120,6 +120,8 @@ class ysw():
 
     def read(self, age):
         self.city = age
+    def k(self):
+        print('hi')
 
 
 class xlc(ysw):
@@ -183,6 +185,9 @@ class gg(kk,ff):
 
 
 from types import MethodType
+
+def oo(self):
+    print('test __slote__')
 
 if __name__ == '__main__':
     bob = student('bob', 79)
@@ -299,3 +304,14 @@ if __name__ == '__main__':
     print('--------------------------------------------多重继承-----------------------')
     fg=gg()
     fg.run()
+    p=ysw()
+    p.read(2)
+    p.k()
+    # __slots__限制的是一个实例特有的属性，不包括类的方法，因为类的方法并不是这个实例独有的，只有方法里的变量属性才是独有的，因为它和
+    # 这个self实例绑在一起，总结来说，__slots__限制的是self的属性，包括从外部添加的方法，因为self.function也是self的属性。但是不能
+    # 限制类的方法。跟类相关的都不能限制。实例或者类的方法，都要有默认参数self
+    #p.oo=MethodType(oo,p)
+    #p.oo
+    ysw.pp=oo
+    p.pp()
+

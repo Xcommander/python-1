@@ -73,6 +73,53 @@ class Chain(object):
     __repr__ = __str__
 
 
+# 要使一个对象本身就可以被调用，就像一个函数一样，xx()这种类型写法，那么则需要__call__函数
+# 比如上面Chain().xlc('xlc').yaw.zc.此时xlc返回的就是一个Chain对象,就变成了Chain.Chain('xlc').ysw.zc，Chain('xlc')就是
+# 直接调用实例本身，所以要写__call__()
+class NewChain(object):
+    def __init__(self, path=''):
+        self.path = path
+
+    def __getattr__(self, item):
+        return NewChain('%s/%s' % (self.path, item))
+
+    def __call__(self, item):
+        return NewChain('%s/%s' % (self.path, item))
+
+    def __str__(self):
+        return self.path
+
+    __repr__ = __str__
+
+
+# 当使用Enum枚举定义的时候，会自动给实例赋值，从默认从1开始，像fiveline为class，然后Gold等是类的实例，然后编译器会自动给他们赋值
+from enum import Enum,unique
+
+FiveLine = Enum('FiveLine', ('GOld', 'Wood', 'Water', 'fire', 'Eatrh'))
+
+class Weekday(Enum):
+    Sun=0
+    Mon=1
+    Tue=2
+    Wed=3
+    Thu=4
+    Fri=5
+    Sat=6
+
+# 用type查看一个类型或者变量的类型，class的定义时运行时动态创建的，而创建class的方法就是使用tyoe()函数
+# type()函数既可以返回一个对象的类型，又可以创建出新的类型，比如我们可以通过type()函数创建出hello类，而无需
+# 通过class Hello(object)的定义
+class Hello(object):
+    def hello(self,name='hello'):
+        print('Hello, %s'%name)
+
+def fn(self,name='Hello'):
+    print('Hello,%s'%name)
+
+
+
+
+
 if __name__ == '__main__':
     s = Student('Michael ')
     print(s)
@@ -85,3 +132,32 @@ if __name__ == '__main__':
     print(s.socre)
     '''
     print(Chain().users('michael').repos)
+    print(callable(NewChain()))
+    print(NewChain().uesrs('michael').repos)
+    for name, member in FiveLine.__members__.items():
+        print(name, '>=', member, ',', member.value)
+
+    for day,value in Weekday.__members__.items():
+        print('it\'s %s and %s '%(day,value.value))
+    # items是实例名加上实例对象组成的dict，而value是实例的属性
+    for k in Weekday.__members__.items():
+        print(k )
+    # callable 判断的是一个内存地址，也就是判断的是一个函数名而非一个函数执行，不要xx（）,只要xx
+    print(callable(Chain.__call__))
+    print('------------------------------------test type--------------------------')
+    h=Hello()
+    print(type(Hello))
+    print(type((h)))
+    # type()创建类
+    #要创建一个class对象，type()函数依次传入3个参数：
+
+    # class的名称；
+    # 继承的父类集合，注意Python支持多重继承，如果只有一个父类，别忘了tuple的单元素写法；
+    # class的方法名称与函数绑定，这里我们把函数fn绑定到方法名hello上。
+    #通过type()函数创建的类和直接写class是完全一样的，
+    # 因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。
+    my=type('Hello',(object,),dict(Hello=fn))
+    m=my()
+    print(type(m))
+    print(type(m.Hello))
+

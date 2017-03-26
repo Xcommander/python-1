@@ -92,6 +92,7 @@ def OpenBytes():
 import os
 import shutil
 
+
 def operateSO():
     print(os.name)
     # 环境变量都是以字典形式存储的
@@ -126,83 +127,164 @@ def operateSO():
     else:
         with open(l, 'w', encoding='utf-8') as f:
             f.write('闫苏婉')
-    oldpath=os.getcwd()
+    oldpath = os.getcwd()
     os.chdir('../')
-    dir=[x for x in os.listdir('.') if os.path.isdir(x) ]
+    dir = [x for x in os.listdir('.') if os.path.isdir(x)]
     print(dir)
     os.chdir(oldpath)
-    pyfile=[x for x in os.listdir('.') if os.path.splitext(x)[1]=='.py']
+    pyfile = [x for x in os.listdir('.') if os.path.splitext(x)[1] == '.py']
     print(pyfile)
+
 
 def file_practice(s):
     if os.path.isdir(s):
-        oldpath=os.getcwd()
+        oldpath = os.getcwd()
         os.chdir(s)
         for i in os.listdir('.'):
-            info=os.lstat(os.path.join('./',i))
-            print(i,info,sep='  ')
+            info = os.lstat(os.path.join('./', i))
+            print(i, info, sep='  ')
     else:
         print('your path  is wrong!!!')
 
-def file_practice2(s,k):
+
+def file_practice2(s, k):
     if os.path.isdir(s):
-        oldpath=os.getcwd()
+        oldpath = os.getcwd()
         os.chdir(s)
         for i in os.walk(os.path.join(os.getcwd(), '.'), True):
             for j in i[2]:
                 if j.find(k) != -1:
-                    print(os.path.join(os.getcwd(),j))
+                    print(os.path.join(os.getcwd(), j))
 
                 else:
                     pass
-
 
         os.chdir(oldpath)
     else:
         print('your path is wrong~~~')
 
 
-
 import os, os.path
+
 
 def search(path, s):
     for x in os.listdir(path):
         fp = os.path.join(path, x)
-        if os.path.isfile(fp) and  s in x:
+        if os.path.isfile(fp) and s in x:
             print(fp)
         elif os.path.isdir(fp):
             search(fp, s)
 
-def new_practice(path,s):
+
+def new_practice(path, s):
     if os.path.isdir(path):
         for i in os.listdir(path):
-            fp=os.path.join(path,i)
-            #print(fp)
+            fp = os.path.join(path, i)
+            # print(fp)
             if os.path.isfile(fp):
-                if str(i).find(s) !=-1:
+                if str(i).find(s) != -1:
                     print(fp)
             elif os.path.isdir(fp):
-                 new_practice(fp,s)
+                new_practice(fp, s)
 
     else:
         pass
 
-if __name__ == '__main__':
-    print('------------------------------StringIO-------------------------------')
-    OpenString()
-    print('------------------------------BytesIO--------------------------------')
-    OpenBytes()
-    print('------------------------------operate file--------------------------')
-    operateSO()
-    print('---------------------------------test--------------------------------')
-    file_practice('../')
-    print('---------------------------------test2-------------------------------')
-    file_practice2(os.getcwd(),'xulinchao')
-    print('---------------------------------test3-------------------------------------')
-    new_practice(os.getcwd(),'xulinchao')
-    print('-----------------------------------test4--------------------------------')
-    search(os.getcwd(),'xulinchao')
+
+# python中把变量从内存中变成可存储或者可传输的过程叫做序列化，序列化后，就可以把对象内容写入磁盘，或者网络传输到起其他机器中去
+# 反之，把序列化对象变成内存中变量叫做反序列化。
+# pickle 序列化
+import pickle
+
+
+def pickle_test():
+    d = dict(name='bob', age=20, socre=99)
     print(os.getcwd())
+    fp = os.path.join(os.getcwd(), 'xxx.txt')
+    if not os.path.isfile(fp):
+        # 序列化首先要先dumps，序列化成二进制bytes，然后二进制文件写进去
+        with open(fp, 'wb') as f:
+            pickle.dump(d,f)
+            #f.write(pickle.dumps(d))
+
+    else:
+        with open(fp, 'rb') as s:
+            print(s.read())
+
+        os.remove(fp)
+def pickle_f():
+    fp = os.path.join(os.getcwd(), 'xxx.txt')
+    if os.path.isfile(fp):
+        with open(fp,'rb') as f:
+            d=pickle.load(f)
+            print(d)
+
+
+class Student(object):
+    def __init__(self,name,age,socre):
+        self.name=name
+        self.age=age
+        self.socre=socre
+# json序列化,json是许多语言都认可的
+# 注意json序列化一个对象的时候，需要定制规则，也就是函数,反序列化也需要定制规则，也就是函数
+def student(obj):
+    return {
+        'name':obj.name,
+        'age':obj.age,
+        'socre':obj.socre
+    }
+def student_s(obj):
+    print(obj)
+    return Student(obj['name'],obj['age'],obj['socre'])
+
+
+def json_object():
+    s=Student('Bob',23,88)
+    #print(json.dumps(s,default=student))
+    fp=os.path.join(os.getcwd(),'ysw.txt')
+    if not os.path.exists(fp):
+        with open(fp,'w',encoding='utf-8') as f:
+            json.dump(s,f,default=lambda obj:obj.__dict__)
+
+def json_f():
+    fp = os.path.join(os.getcwd(), 'ysw.txt')
+    if os.path.exists(fp):
+        with open(fp,'r',encoding='utf-8') as f:
+            #print(f.read())
+            s=json.load(f,object_hook=student_s)
+            print(s)
+
+
+import json
+def json_s():
+    d=dict(name='bob', age=20, socre=99)
+    print(json.dumps(d))
 
 
 
+
+
+if __name__ == '__main__':
+    # print('------------------------------StringIO-------------------------------')
+    # OpenString()
+    # print('------------------------------BytesIO--------------------------------')
+    # OpenBytes()
+    # print('------------------------------operate file--------------------------')
+    # operateSO()
+    # print('---------------------------------test--------------------------------')
+    # file_practice('../')
+    # print('---------------------------------test2-------------------------------')
+    # file_practice2(os.getcwd(), 'xulinchao')
+    # print('---------------------------------test3-------------------------------------')
+    # new_practice(os.getcwd(), 'xulinchao')
+    # print('-----------------------------------test4--------------------------------')
+    # search(os.getcwd(), 'xulinchao')
+    # print(os.getcwd())
+    # pickle_test()
+    # pickle_f()
+    # json_s()
+    # print('xlc')
+    json_object()
+    # json_f()
+
+    pass

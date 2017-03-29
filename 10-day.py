@@ -237,7 +237,7 @@ def student_s(obj):
     print(obj)
     return Student(obj['name'],obj['age'],obj['socre'])
 
-
+# lambda表达式自带返回表达式处理后的结果（默认自带return），所以不需要写return。
 def json_object():
     s=Student('Bob',23,88)
     #print(json.dumps(s,default=student))
@@ -261,6 +261,17 @@ def json_s():
     print(json.dumps(d))
 
 
+def json_test():
+    d=dict(name='xulinchao',age=22,sorce=100)
+    fp=os.path.join(os.getcwd(),'json')
+    with open(fp,'w') as f:
+        json.dump(d,f)
+
+def json_load():
+    fp=os.path.join(os.getcwd(),'json')
+    with open(fp,'r') as f:
+        d=json.load(f)
+        print(d)
 
 
 
@@ -284,7 +295,9 @@ if __name__ == '__main__':
     # pickle_f()
     # json_s()
     # print('xlc')
-    json_object()
+    # json_object()
     # json_f()
+    # json_test()
+    json_load()
 
     pass

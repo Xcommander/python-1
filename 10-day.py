@@ -204,75 +204,91 @@ def pickle_test():
     if not os.path.isfile(fp):
         # 序列化首先要先dumps，序列化成二进制bytes，然后二进制文件写进去
         with open(fp, 'wb') as f:
-            pickle.dump(d,f)
-            #f.write(pickle.dumps(d))
+            pickle.dump(d, f)
+            # f.write(pickle.dumps(d))
 
     else:
         with open(fp, 'rb') as s:
             print(s.read())
 
         os.remove(fp)
+
+# 序列化不能序列化流对象，只能序列化一些基本的类型哪个，比如list，string ,dict,int,float,其他类型序列化不行
+def json_IO_test():
+    s=StringIO("OM")
+    fp=os.path.join(os.getcwd(),'OM')
+    with open(fp,'w',encoding='utf-8') as k:
+        pickle.dump(k,s)
+
 def pickle_f():
     fp = os.path.join(os.getcwd(), 'xxx.txt')
     if os.path.isfile(fp):
-        with open(fp,'rb') as f:
-            d=pickle.load(f)
+        with open(fp, 'rb') as f:
+            d = pickle.load(f)
             print(d)
 
 
 class Student(object):
-    def __init__(self,name,age,socre):
-        self.name=name
-        self.age=age
-        self.socre=socre
+    def __init__(self, name, age, socre):
+        self.name = name
+        self.age = age
+        self.socre = socre
+
+
 # json序列化,json是许多语言都认可的
 # 注意json序列化一个对象的时候，需要定制规则，也就是函数,反序列化也需要定制规则，也就是函数
 def student(obj):
     return {
-        'name':obj.name,
-        'age':obj.age,
-        'socre':obj.socre
+        'name': obj.name,
+        'age': obj.age,
+        'socre': obj.socre
     }
+
+
 def student_s(obj):
     print(obj)
-    return Student(obj['name'],obj['age'],obj['socre'])
+    return Student(obj['name'], obj['age'], obj['socre'])
+
 
 # lambda表达式自带返回表达式处理后的结果（默认自带return），所以不需要写return。
 def json_object():
-    s=Student('Bob',23,88)
-    #print(json.dumps(s,default=student))
-    fp=os.path.join(os.getcwd(),'ysw.txt')
+    s = Student('Bob', 23, 88)
+    # print(json.dumps(s,default=student))
+    fp = os.path.join(os.getcwd(), 'ysw.txt')
     if not os.path.exists(fp):
-        with open(fp,'w',encoding='utf-8') as f:
-            json.dump(s,f,default=lambda obj:obj.__dict__)
+        with open(fp, 'w', encoding='utf-8') as f:
+            json.dump(s, f, default=lambda obj: obj.__dict__)
+
 
 def json_f():
     fp = os.path.join(os.getcwd(), 'ysw.txt')
     if os.path.exists(fp):
-        with open(fp,'r',encoding='utf-8') as f:
-            #print(f.read())
-            s=json.load(f,object_hook=student_s)
+        with open(fp, 'r', encoding='utf-8') as f:
+            # print(f.read())
+            s = json.load(f, object_hook=student_s)
             print(s)
 
 
 import json
+
+
 def json_s():
-    d=dict(name='bob', age=20, socre=99)
+    d = dict(name='bob', age=20, socre=99)
     print(json.dumps(d))
 
 
 def json_test():
-    d=dict(name='xulinchao',age=22,sorce=100)
-    fp=os.path.join(os.getcwd(),'json')
-    with open(fp,'w') as f:
-        json.dump(d,f)
+    d = dict(name='xulinchao', age=22, sorce=100)
+    fp = os.path.join(os.getcwd(), 'json')
+    with open(fp, 'w') as f:
+        json.dump(d, f)
+
 
 def json_load():
-    fp=os.path.join(os.getcwd(),'json')
-    with open(fp,'r') as f:
-        d=json.load(f)
+    fp = os.path.join(os.getcwd(), 'json')
+    with open(fp, 'r') as f:
+        d = json.load(f)
         print(d)
-
 
 
 if __name__ == '__main__':
@@ -298,6 +314,7 @@ if __name__ == '__main__':
     # json_object()
     # json_f()
     # json_test()
-    json_load()
+    # json_load()
+    json_IO_test()
 
     pass

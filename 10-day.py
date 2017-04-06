@@ -215,10 +215,10 @@ def pickle_test():
 
 # 序列化不能序列化流对象，只能序列化一些基本的类型哪个，比如list，string ,dict,int,float,其他类型序列化不行
 def json_IO_test():
-    s=StringIO("OM")
+    s=Student("Bob",20,"99")
     fp=os.path.join(os.getcwd(),'OM')
     with open(fp,'w',encoding='utf-8') as k:
-        pickle.dump(k,s)
+        k.write(11)
 
 def pickle_f():
     fp = os.path.join(os.getcwd(), 'xxx.txt')

@@ -63,8 +63,61 @@ def subprocess_test():
     print('Exit code:', r)
 
 
+# 进程通信,记住args=（）是传递参数的，针对这个子进程的函数体，传入的参数
+def Queue_write(q):
+    print('Process to write : %s' % os.getpid())
+    for value in list('NCAA'):
+        print("Put %s to queue....." % value)
+        q.put(value)
+        time.sleep(random.random())
+
+
+def Queue_read(q):
+    print('Process to read: %s' % os.getpid())
+    while True:
+        print('Get %s from queue.....' % q.get(True))
+
+
+from multiprocessing import Queue
+
+
+def Queue_main():
+    print('Mian process %s' % os.getpid())
+    q = Queue()
+    pw = Process(target=Queue_write, args=(q,))
+    pr = Process(target=Queue_read, args=(q,))
+    pw.start()
+    pr.start()
+    pw.join()
+    pr.terminate()
+
+
+import threading
+
+
+def loop():
+    print('Thread %s is running' % threading.current_thread().name)
+    n = 0
+    while n < 5:
+        n+=1
+        print(n)
+        print('Thread %s >> %s' % (threading.current_thread().name, n))
+        time.sleep(1)
+
+
+    print('Thread %s ended' % threading.current_thread().name)
+
+
+def main_thread():
+    print('Thread %s is running ' % threading.current_thread().name)
+    t = threading.Thread(target=loop, name="LoopThread")
+    t.start()
+    t.join()
+    print('Thread %s ended' % threading.current_thread().name)
+
+
 if __name__ == '__main__':
-    subprocess_test()
+    main_thread()
 
     # fork_test()
     pass

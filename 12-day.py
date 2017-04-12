@@ -14,8 +14,8 @@ import re, time
 
 def match():
     start = time.time()
-    for i in range(1, 4000):
-        if (re.match(r'^[\d+]{3}-[\d+]{3,8}$', '021-1123')):
+    for i in range(1, 40000):
+        if (re.match(r'^[\d]{3}-[\d]{3,8}$', '021-1123')):
             pass
         else:
             print('error')
@@ -27,8 +27,8 @@ def match():
 
 def compile_match():
     start = time.time();
-    express = re.compile(r'^[\d+]{3}-[\d+]{3,8}$')
-    for i in range(1, 4000):
+    express = re.compile(r'^[\d]{3}-[\d]{3,8}$')
+    for i in range(1, 40000):
         if (express.match('021-1123')):
             pass
         else:
@@ -88,5 +88,6 @@ if __name__ == '__main__':
     #expression_practice('xulinchao@wind-mobi.com')
     print(re.match(r'\\n',r'\n'))
     print(r'\n')
+    print(re.split(r'[\s\,\;]+','a  d ;c'))
 
     pass

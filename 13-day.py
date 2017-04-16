@@ -1,5 +1,4 @@
 from datetime import datetime,timedelta,timezone
-import enum
 
 
 def Display_time():
@@ -18,7 +17,7 @@ def do_time():
     print(datetime.now().strftime('%y  %b %d '))
     print(datetime.now()+timedelta(hours=10,days=1))
 
-#时区时间，互相转换，必须先拿到utc时间，然后换成带时区的utc时间，在进行时区转换，时区转换用astimezone
+# 时区时间，互相转换，必须先拿到utc时间，然后换成带时区的utc时间，在进行时区转换，时区转换用astimezone
 def Time_zone():
     dz=datetime.utcnow()
     dt=dz.replace(tzinfo=timezone.utc)
@@ -26,8 +25,8 @@ def Time_zone():
     print(bj)
 
 
-#拿到的时间都是不带时区的，通过replace转换成时区的，然后在通过时区转换成所需要的时区
-#把不带时区的time转换成带时区的，接下来通过带时区的转换成标准时区，转换成带时区调用replace函数
+# 拿到的时间都是不带时区的，通过replace转换成时区的，然后在通过时区转换成所需要的时区
+# 把不带时区的time转换成带时区的，接下来通过带时区的转换成标准时区，转换成带时区调用replace函数
 
 def to_timestamp(dt_str,tz_str):
     dt=datetime.strptime(dt_str,'%Y-%m-%d %H:%M:%S')

@@ -31,3 +31,4 @@ if __name__ == '__main__':
     assert b'abcd' == safe_base64_decode(b'YWJjZA=='), safe_base64_decode('YWJjZA==')
     assert b'abcd' == safe_base64_decode(b'YWJjZA'), safe_base64_decode('YWJjZA')
     print(base64.urlsafe_b64encode(b'abcd'))
+
